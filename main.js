@@ -1,6 +1,7 @@
 let departments = [];
 const data_list = document.getElementById("data_list");
 const data_total = document.getElementById("data_total");
+const svgObject = document.getElementById("svg");
 let data_total_value = 0;
 
 function percentageToColor(percentage) {
@@ -17,6 +18,11 @@ function percentageToColorText(percentage) {
   else if (percentage > 10) return "#023E8A";
   else if (percentage > 5) return "#0077B6";
   else if (percentage > 0) return "#0096C7";
+}
+
+function numberWithCommas(x) {
+  // From stackoverflow xd
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 class Map {
@@ -38,13 +44,26 @@ class Map {
       department.updatePercentage();
     });
   }
+
+  static download() {
+    const svg = svgObject.contentDocument.children[0];
+    console.log(svg.childNodes);
+  }
 }
 
 class Department {
   constructor(svg) {
     this.title = svg.attributes.title.value;
     this.id = svg.attributes.class.value.replace("CO ", "");
+    this.locationy = Number(svg.attributes.locationy.value);
+    this.locationx = Number(svg.attributes.locationx.value);
+    this.sizeModifier = svg.attributes.sizemodifier
+      ? Number(svg.attributes.sizemodifier.value)
+      : 1;
+    this.isTextOnScreen = false;
     this.svg = svg;
+    this.svg.style.stroke = "#fff";
+    this.svg.style.strokeWidth = "1px";
     this.insertInDom();
     this.getValue();
   }
@@ -53,13 +72,14 @@ class Department {
     data_list.innerHTML += `
     <div class="root__left__options--data__form">
     <label>${this.title}</label>
-    <input 
+    <input
     id="${this.id}"
     type="number"
     min="0"
-    value="${Math.floor(Math.random() * (10_000_000 - 200 + 1) + 200)}"
+    value="${Math.floor(Math.random() * (1_000_000 - 1_000 + 1) + 1_000)}"
     onfocus="Department.onfocus(this)"
-    onfocusout="Department.onfocusout(this)"/>
+    onfocusout="Department.onfocusout(this)"
+    />
     <p class="center" id="percentage_${this.id}">0%</p>
     </div>
     `;
@@ -74,10 +94,94 @@ class Department {
     return (value / data_total_value) * 100;
   }
 
+  insertText() {
+    if (this.isTextOnScreen) {
+      this.titleText.remove();
+      this.valueText.remove();
+    }
+
+    const titleText = Department.createSvgText(
+      this.title,
+      this.locationy,
+      this.locationx,
+      "title"
+    );
+
+    const valueText = Department.createSvgText(
+      numberWithCommas(this.getValue()),
+      this.locationy + 16 * this.sizeModifier,
+      this.locationx,
+      "value"
+    );
+
+    this.isTextOnScreen = true;
+    this.titleText = titleText;
+    this.valueText = valueText;
+    this.svg.parentElement.appendChild(titleText);
+    this.svg.parentElement.appendChild(valueText);
+    titleText.style.fontSize = this.adjustFontSize(titleText);
+    valueText.style.fontSize = this.adjustFontSize(valueText);
+    this.fillText(titleText, valueText);
+  }
+
+  fillText(titleText, valueText) {
+    const percentage = this.getPercentage();
+
+    let fillColor = "#03045E";
+    let borderColor = this.svg.style.fill;
+    // let borderColor = "#bedfe6";
+
+    if (percentage > 10) {
+      fillColor = "#fff";
+      // borderColor = "#03045E";
+    }
+
+    titleText.style.fill = fillColor;
+    valueText.style.fill = fillColor;
+    titleText.style.textShadow = Department.generateTextShadow(
+      borderColor,
+      0.5
+    );
+    valueText.style.textShadow = Department.generateTextShadow(
+      borderColor,
+      0.5
+    );
+  }
+
+  static generateTextShadow(color, scale) {
+    return `${2 * scale}px 0 0 ${color},
+    ${-2 * scale}px 0 0 ${color},
+    0 ${2 * scale}px 0 ${color},
+    0 ${-2 * scale}px 0 ${color},
+    ${1 * scale}px ${1 * scale}px ${color},
+    ${-1 * scale}px ${-1 * scale}px 0 ${color},
+    ${1 * scale}px ${-1 * scale}px 0 ${color},
+    ${-1 * scale}px ${1 * scale}px 0 ${color}`;
+  }
+
+  static createSvgText(content, y, x, class_) {
+    const svgText = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "text"
+    );
+
+    svgText.setAttribute("y", y);
+    svgText.setAttribute("x", x);
+    svgText.setAttribute("class", class_);
+    svgText.appendChild(document.createTextNode(content));
+    return svgText;
+  }
+
+  adjustFontSize(element) {
+    const fontSize = Number(
+      window.getComputedStyle(element).fontSize.slice(0, -2)
+    );
+    return fontSize * this.sizeModifier;
+  }
+
   fillColor() {
     this.svg.style.fill = percentageToColor(this.getPercentage());
-    this.svg.style.stroke = "#fff";
-    this.svg.style.strokeWidth = "1px";
+    this.insertText();
   }
 
   updatePercentage() {
@@ -105,7 +209,7 @@ class Department {
 }
 
 function run() {
-  const svg = document.getElementById("svg").contentDocument;
+  const svg = svgObject.contentDocument;
   const departments_raw = svg.getElementsByClassName("CO");
 
   for (let i in departments_raw) {
@@ -114,6 +218,5 @@ function run() {
   }
 
   Map.updateMap();
+  Map.download();
 }
-
-setTimeout(run, 100);

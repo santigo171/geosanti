@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;700&display=swap");
+
+.title {
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  text-anchor: middle;
+  word-wrap: break-word;
+}
+
+.value {
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 300;
+  text-anchor: middle;
+  text-align: center;
+}

@@ -37,11 +37,19 @@ html {
 }
 
 .root__header__title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   letter-spacing: 4px;
 }
 
 .root__header__title--blue {
   color: #264e83;
+}
+
+.root__header__title--logo {
+  height: 50px;
+  margin-right: 20px;
 }
 
 .root__header__description {
@@ -149,16 +157,35 @@ html {
 }
 
 .root__right {
+  background-color: rgb(122, 122, 122);
+  /* position: relative; */
+}
+
+#svg {
+  height: 96%;
+
+  /* position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+  /* height: 96%; */
+
+  /* position: relative; */
   background-color: #fff;
+}
+
+object {
   position: relative;
 }
 
-.root__right__canvas {
-  height: 99%;
+#svg > * {
+  background-color: red !important;
   position: absolute;
-  left: 50%;
   top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
 }
 
 .root__footer {
@@ -170,8 +197,4 @@ html {
 
 .root__footer_text {
   color: #fff;
-}
-
-#svg {
-  /* display: none; */
 }

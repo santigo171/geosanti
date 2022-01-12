@@ -11,12 +11,18 @@
       href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/x-icon" />
   </head>
   <body>
     <div class="root">
       <header class="root__header center">
         <h1 class="root__header__title">
+          <img
+            src="/assets/favicon.png"
+            alt="Logo"
+            class="root__header__title--logo"
+          />
           <span class="root__header__title--blue">Geo</span>Santi
         </h1>
         <p class="root__header__description">
@@ -26,18 +32,6 @@
       </header>
       <div class="root__left">
         <div class="root__left__options">
-          <div class="root__left__options--input">
-            <label>Título del mapa:</label>
-            <input type="text" id="title" />
-          </div>
-          <div class="root__left__options--input">
-            <label>Subtitulo:</label>
-            <input type="text" id="subtitle" />
-          </div>
-          <div class="root__left__options--input">
-            <label>Descripción:</label>
-            <input type="text" id="description" />
-          </div>
           <div class="root__left__options--data">
             <h2>Data</h2>
             <div id="data_list"></div>
@@ -48,18 +42,17 @@
           </div>
           <div class="root__left__options--button">
             <button onclick="Map.updateMap()">Actualizar</button>
-            <button>Descargar</button>
+            <button onclick="Map.download()">Descargar</button>
           </div>
         </div>
       </div>
-      <div class="root__right">
-        <object id="svg" data="./colombia.svg" type="image/svg+xml"></object>
-        <canvas
-          id="canvas"
-          class="root__right__canvas"
-          width="1000"
-          height="1200"
-        ></canvas>
+      <div class="root__right center">
+        <object
+          id="svg"
+          data="./assets/colombia.svg"
+          type="image/svg+xml"
+          onload="run()"
+        ></object>
       </div>
       <footer class="root__footer center">
         <p class="root__footer_text">Tiss besito ♥</p>
