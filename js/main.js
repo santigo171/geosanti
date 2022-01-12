@@ -46,8 +46,18 @@ class Map {
   }
 
   static download() {
-    const svg = svgObject.contentDocument.children[0];
-    console.log(svg.childNodes);
+    const loader = document.getElementById("loader");
+    loader.style.display = "block";
+
+    setTimeout(() => {
+      const svg = svgObject.contentDocument.children[0];
+      svgExport.downloadSvg(
+        svg, // SVG DOM Element object to be exported. Alternatively, a string of the serialized SVG can be passed
+        "svg", // chart title: file name of exported image
+        { width: 1612, height: 1693 } // options (optional, please see below for a list of option properties)
+      );
+      loader.style.display = "none";
+    }, 300);
   }
 }
 
@@ -76,7 +86,7 @@ class Department {
     id="${this.id}"
     type="number"
     min="0"
-    value="${Math.floor(Math.random() * (1_000_000 - 1_000 + 1) + 1_000)}"
+    value="0"
     onfocus="Department.onfocus(this)"
     onfocusout="Department.onfocusout(this)"
     />
@@ -218,5 +228,4 @@ function run() {
   }
 
   Map.updateMap();
-  Map.download();
 }
