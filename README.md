@@ -2,9 +2,11 @@
 
 Una poderosa herramienta para hacer mapas georeferenciados en Colombia
 
-[![Ejemplo](https://santigo171.github.io/geosanti/assets/favicon.png "Ejemplo")](https://santigo171.github.io/geosanti/ "Ejemplo")
+[![Ejemplo](https://geosanti.netlify.app/assets/favicon.png "Ejemplo")](https://geosanti.netlify.app/ "Ejemplo")
 
-Úsala en: https://santigo171.github.io/geosanti/
+Úsala en: https://geosanti.netlify.app/
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/38d4330b-943f-42d1-9499-176be14750a4/deploy-status)](https://app.netlify.com/sites/geosanti/deploys)
 
 Creado por David Hurtado
 
