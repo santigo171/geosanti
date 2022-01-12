@@ -146,6 +146,11 @@ class Department {
       // borderColor = "#03045E";
     }
 
+    if (this.id == "DC") {
+      fillColor = "#03045E";
+      borderColor = "#fff";
+    }
+
     titleText.style.fill = fillColor;
     valueText.style.fill = fillColor;
     titleText.style.textShadow = Department.generateTextShadow(
